@@ -114,7 +114,7 @@ const db = firebase.initializeApp(firebaseConfig).database();
 const lexiconRef = db.ref("lexicon");
 export default {
   firebase: {
-    lexicon: lexiconRef.orderByChild("reviewed"),
+    lexicon: lexiconRef.orderByChild("reviewed").equalTo(false),
     pos: {
       source: db.ref("tags"),
       cancelCallback(err) {
