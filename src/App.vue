@@ -51,30 +51,44 @@
       <v-data-table :headers="headers" :items="lexicon" class="elevation-1">
         <template v-slot:items="props">
           <td class="text-xs-right word">
-            <v-text-field  v-model="props.item.word" :rules="[noSpace, noEnglish]"></v-text-field>
-          </td>
-          <td class="text-xs-right pos">
-            <v-select
-              v-model="props.item.pos"
-              :items="pos"
-              item-text="tag"
-              item-value="id"
-              placeholder="Select part of speech"
-            ></v-select>
+            <v-layout column>
+              <v-text-field v-model="props.item.word" :rules="[noSpace, noEnglish]"></v-text-field>
+
+              <v-select
+                v-model="props.item.pos"
+                :items="pos"
+                item-text="tag"
+                item-value="id"
+                placeholder="Select part of speech"
+              ></v-select>
+            </v-layout>
           </td>
 
           <td class="justify-center layout px-0 actions" v-if="props.item.pos">
-            <v-icon
-              v-if="props.item.pos && props.item.reviewed"
-              color="primary"
-              @click="toggle_done(props.item)"
-            >check_circle</v-icon>
-            <v-icon v-else color="secondary" @click="toggle_done(props.item)">check</v-icon>
-            <v-icon color="secondary" @click="remove(props.item)">clear</v-icon>
+            <v-layout column>
+              <v-btn
+                v-disabled="!props.item.pos"
+                large
+                icon
+                color="primary"
+                @click="toggle_done(props.item)"
+              >
+                <v-icon>check</v-icon>
+              </v-btn>
+              <v-btn large icon color="error" @click="remove(props.item)">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </v-layout>
           </td>
           <td v-else class="justify-center layout px-0">
-            <v-icon color="secondary" disabled>check</v-icon>
-            <v-icon color="secondary" @click="remove(props.item)">clear</v-icon>
+            <v-layout column>
+              <v-btn large icon color="primary" disabled>
+                <v-icon>check</v-icon>
+              </v-btn>
+              <v-btn large icon color="error" @click="remove(props.item)">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </v-layout>
           </td>
         </template>
       </v-data-table>
@@ -115,9 +129,8 @@ export default {
     noSpace: v => v.indexOf(" ") < 0 || "Space not allowed",
     noEnglish: v => v.match(/[a-zA-Z0-9]/) === null || "Please enter Malayalam",
     headers: [
-      { text: "Word", value: "word", align: "left", width: "50%" },
-      { text: "Part of speech", value: "pos", align: "left", width: "40%" },
-      { text: "Actions", value: "name", sortable: true, align: "left" , width: "10%"}
+      { text: "Word", sortable: false },
+      { text: "Action", sortable: false }
     ],
     newItem: {
       word: "",
@@ -172,19 +185,8 @@ export default {
 <style>
 input {
   border: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', 'Manjari', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "Manjari", sans-serif;
   font-size: 1em;
 }
-.elevation-1 table.v-table thead td:not(:nth-child(1)),
-.elevation-1 table.v-table tbody td:not(:nth-child(1)),
-.elevation-1 table.v-table tbody td:first-child,
-.elevation-1 table.v-table thead th:first-child,
-.elevation-1 table.v-table tbody th:first-child {
-  padding: 10px 2px 10px 2px;
-}
-
-.word .v-text-field input[type="text"] {
-  min-width: 12ch;
-}
-
 </style>
