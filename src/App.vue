@@ -21,7 +21,7 @@
 
           <v-card-text>
             <v-container grid-list-md>
-              <v-layout wrap>
+              <v-layout column>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="newItem.word" label="Word"></v-text-field>
                 </v-flex>
@@ -41,7 +41,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn flat @click="close">Cancel</v-btn>
-            <v-btn flat @click="save">Save</v-btn>
+            <v-btn flat @click="add(newItem)">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -67,7 +67,6 @@
           <td class="justify-center layout px-0 actions" v-if="props.item.pos">
             <v-layout column>
               <v-btn
-                v-disabled="!props.item.pos"
                 large
                 icon
                 color="primary"
@@ -156,6 +155,7 @@ export default {
         pos: item.pos,
         reviewed: item.reviewed || false
       });
+      this.close()
     },
     toggle_done(item) {
       lexiconRef.child(item[".key"]).set({
